@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
-// const cTable = require("console.table");
+const cTable = require("console.table");
 const chalk = require("chalk");
 var figlet = require("figlet");
 
@@ -88,7 +88,13 @@ const mainLobby = () => {
 // To view all employees, this function will run
 const viewEmployees = () => {
     db.query(
-      `SELECT * FROM employees`,
+      `SELECT employees.id, first_name, last_name, roles.title, roles.salary, departments.dep_name AS department, manager_id 
+      AS manager 
+      FROM employees 
+      JOIN roles 
+      ON roles.id = employees.role_id
+      JOIN departments 
+      ON departments.id = roles.dep_id;`,
       (err, data) => {
         if (err) {
           console.log(err);
